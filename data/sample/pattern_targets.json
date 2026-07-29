@@ -1,0 +1,46 @@
+{
+  "attrition": [
+    {
+      "cand_id": "CAND-8a2db2e6-3bfd-48a6-b05f-ddf566fadca0",
+      "emp_id": "EMP-24f43c62-b523-40de-9b87-d29c4cfd0fc1"
+    },
+    {
+      "cand_id": "CAND-c359810a-71a6-414c-9f3c-44dc5ef787b8",
+      "emp_id": "EMP-73b911d8-12f5-431a-9a52-d2ee22bf18f5"
+    },
+    {
+      "cand_id": "CAND-99e4704c-2c56-40cd-a5ba-247221df5609",
+      "emp_id": "EMP-c3f62136-846d-4a3b-a661-c42630385dd7"
+    },
+    {
+      "cand_id": "CAND-411920f6-d056-4199-b728-ddc20f5e8b47",
+      "emp_id": "EMP-5cf85eeb-f053-4851-9ce0-e2bbc7edea02"
+    },
+    {
+      "cand_id": "CAND-89b4094a-e048-41de-81f8-3199f4eae769",
+      "emp_id": "EMP-ad0205f5-1417-42f9-ab91-731a1eb05b4a"
+    }
+  ],
+  "control": [
+    {
+      "cand_id": "CAND-3da06476-f778-4676-b50d-112e8164ceec",
+      "emp_id": "EMP-74fd33d1-84f2-4d0f-b947-4bfacdd0b4d4"
+    },
+    {
+      "cand_id": "CAND-0be7728e-6a1a-4a9d-81d4-8a101b968925",
+      "emp_id": "EMP-c8c85ad6-82cb-4dc7-bcd3-0e99638e1388"
+    },
+    {
+      "cand_id": "CAND-51d08109-fc90-4838-9874-1408f7b217c7",
+      "emp_id": "EMP-4efc8248-e10b-4a47-bfae-b7487781321e"
+    },
+    {
+      "cand_id": "CAND-b9493906-939f-44eb-be5e-215ec47cc30b",
+      "emp_id": "EMP-673d2920-60ee-44ba-a4b0-718e8ced4707"
+    },
+    {
+      "cand_id": "CAND-13ed280a-d5e1-4d1f-a5f2-2dfba741104b",
+      "emp_id": "EMP-cfa9026b-6a24-4f46-baf7-fa21a93e7b5b"
+    }
+  ]
+}

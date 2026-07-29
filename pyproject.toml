@@ -1,20 +1,36 @@
 [tool.poetry]
-name = "langchain-neo4j-rag-app"
+package-mode = false
+name = "hiregraph"
 version = "0.1.0"
-description = "An increasingly comprehensive RAG app with LangChain, Neo4j, and more"
-authors = ["hfhoffman1144 <hfh160130@utdallas.edu>"]
+description = "A portfolio RAG chatbot combining Neo4j graph retrieval and vector search for a fictional recruiting-analytics domain."
+authors = ["Author <author@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
-pre-commit = "^3.7.1"
-langchain-community = "^0.2.9"
-langchain-openai = "^0.1.17"
-streamlit = "^1.36.0"
-pytest = "^8.3.1"
-neo4j = "^5.22.0"
-rptree = "^0.1.1"
+python = "^3.11"
+langchain = "*"
+langchain-openai = "*"
+neo4j = "*"
+fastapi = "*"
+uvicorn = "*"
+streamlit = "*"
+plotly = "*"
+python-dotenv = "*"
+faker = "*"
 
+[tool.poetry.group.dev.dependencies]
+black = "*"
+isort = "*"
+flake8 = "*"
+pre-commit = "*"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 88
 
 [build-system]
 requires = ["poetry-core"]

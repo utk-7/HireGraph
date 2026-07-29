@@ -1,5 +1,23 @@
-chroma_data/
-*.env
-notebooks/
-eda/
-todo.md
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Data
+data/generated/
+
+# Poetry
+poetry.lock
+
+# IDEs
+.vscode/
+.idea/

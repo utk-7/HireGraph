@@ -1,0 +1,4 @@
+{
+  "answer": "I couldn't find any structured records matching your condition.",
+  "cypher_used": "MATCH (c:Candidate)-[:WROTE]->(r:Review)-[:ABOUT]->(jp:JobPosting)\nWHERE c.id IN ['CAND-38f688b5-43e7-466e-9582-d2cd570384aa','CAND-4dd31efe-9d66-4aaf-9e50-6ceee15a39bb','CAND-f774d004-6709-464d-9f53-a4e8b5afc921','CAND-9423410a-5752-4469-864c-f810cf53fcfb','CAND-033c01fa-07bb-4877-9ff1-b22a1deb8ea5',\n              'CAND-aa8e80c0-af9a-4067-884e-6ff4c54ca209','CAND-7b88036f-5fb9-4af7-b256-b2b14fac0163','CAND-d83b07a0-8dda-44c0-b701-f04b530c41d4','CAND-0ea43bc1-dc55-40ba-a61b-ae35a1880a7d','CAND-e101612c-b949-401e-b506-70294a518931']\nAND r.review_type = 'interview'\nAND r.review_date < c.hire_date\nRETURN c.id AS id;"
+}

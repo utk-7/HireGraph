@@ -36,7 +36,11 @@ def run_test(question: str):
     else:
         print("--> NO TOOL CHOSEN (Direct Answer)")
         
-    print(f"\nFINAL ANSWER:\n{messages[-1].content}\n")
+    final_answer = messages[-1].content
+    try:
+        print(f"\nFINAL ANSWER:\n{final_answer}\n")
+    except UnicodeEncodeError:
+        print(f"\nFINAL ANSWER:\n{final_answer.encode('ascii', 'replace').decode('ascii')}\n")
 
 if __name__ == "__main__":
     # 3 Routing Tests

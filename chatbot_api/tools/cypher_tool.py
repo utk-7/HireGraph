@@ -20,7 +20,7 @@ Nodes:
 - Interview: id, round_number, interview_type, interview_date, status, feedback_score
 - Recruiter: id, name, seniority
 - Interviewer: id, name, role
-- Offer: id, offer_date, decision_date, status, base_salary, equity, sign_on_bonus
+- Offer: id, extended_date, decision_date, decision, base_salary, equity, bonus
 - Employee: id, name, hire_date, still_employed, tenure_months, role
 - Review: id, review_type (interview_experience|employee_experience), text, review_date, embedding
 
@@ -47,14 +47,81 @@ def cypher_rag_tool(cypher_query: str) -> str:
     Returns the stringified JSON records found.
     """
     driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-    try:
+    
+    def run_query(query: str):
         with driver.session() as session:
-            result = session.run(cypher_query)
+            result = session.run(query)
             records = [record.data() for record in result]
+            summary = result.consume()
+            
+            # Neo4j doesn't throw exceptions for missing properties, it just emits warnings and returns null/empty.
+            # We must catch these warnings and throw an exception to trigger the repair loop!
+            if summary.notifications:
+                warnings = []
+                for n in summary.notifications:
+                    if hasattr(n, 'description'):
+                        warnings.append(n.description)
+                    elif isinstance(n, dict) and 'description' in n:
+                        warnings.append(n['description'])
+                    else:
+                        warnings.append(str(n))
+                raise Exception("Database Warnings (treat as error to repair): " + "; ".join(warnings))
+                
             if not records:
-                return f"Cypher Query executed:\n{cypher_query}\n\nResult: No matching records found."
-            return f"Cypher Query executed:\n{cypher_query}\n\nResult:\n{records}"
-    except Exception as e:
-        return f"Database Error executing Cypher: {e}\nQuery attempted:\n{cypher_query}"
+                return f"Cypher Query executed:\n{query}\n\nResult: No matching records found.", True
+            return f"Cypher Query executed:\n{query}\n\nResult:\n{records}", True
+            
+    try:
+        try:
+            msg, success = run_query(cypher_query)
+            return msg
+        except Exception as e:
+            print(f"\n[Cypher Tool] Caught Error/Warning: {e}")
+            print("[Cypher Tool] Initiating LLM Repair Loop...")
+            # First attempt failed. Let's repair it exactly once.
+            from langchain_openai import ChatOpenAI
+            
+            repair_prompt = f"""You are a Neo4j Cypher expert. The following Cypher query failed to execute due to a database error.
+            
+Query:
+{cypher_query}
+
+Error:
+{e}
+
+Schema:
+{SCHEMA}
+
+Please correct the Cypher query. Output ONLY the corrected Cypher query, nothing else. Do not use markdown blocks, just the query."""
+            
+            if os.getenv("USE_HF_MOCK") == "1":
+                from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+                hf = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.3", max_new_tokens=512)
+                repair_llm = ChatHuggingFace(llm=hf)
+            else:
+                from langchain_openai import ChatOpenAI
+                repair_llm = ChatOpenAI(
+                    base_url="https://openrouter.ai/api/v1",
+                    api_key=os.getenv("OPENROUTER_API_KEY"),
+                    model="openai/gpt-oss-20b:free",
+                    temperature=0
+                )
+            
+            repaired_query_response = repair_llm.invoke(repair_prompt).content.strip()
+            # Clean up markdown if the LLM still used it
+            if repaired_query_response.startswith("```cypher"):
+                repaired_query_response = repaired_query_response.replace("```cypher", "").replace("```", "").strip()
+            elif repaired_query_response.startswith("```"):
+                repaired_query_response = repaired_query_response.replace("```", "").strip()
+                
+            print(f"[Cypher Tool] Repaired Query:\n{repaired_query_response}")
+                
+            # Attempt to execute the repaired query
+            try:
+                msg, success = run_query(repaired_query_response)
+                return msg
+            except Exception as e2:
+                # Retry also failed. Clean failure message.
+                return "I'm sorry, I was unable to execute the database query due to a structural error that could not be repaired."
     finally:
         driver.close()

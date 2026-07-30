@@ -1,0 +1,557 @@
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) \nWHERE jp.posted_date IS NOT NULL AND o.offer_date IS NOT NULL \nWITH d, duration.inDays(jp.posted_date, o.offer_date).days AS days_to_offer \nRETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer ORDER BY avg_days_to_offer DESC LIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_552502E8E4A14F00B84D0F2B'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) \nWHERE app.applied_date IS NOT NULL AND o.offer_date IS NOT NULL \nWITH d, duration.inDays(app.applied_date, o.offer_date).days AS days_to_offer \nRETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer ORDER BY avg_days_to_offer DESC LIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_37E61CE5A0034F42B4E5E43E'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) \nWITH d, duration.inDays(date(jp.posted_date), date(o.offer_date)).days AS days_to_offer \nRETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer ORDER BY avg_days_to_offer DESC LIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_D7141BB38C7C4F51A6898491'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content="Cypher Query executed:\nMATCH (o:Offer) RETURN o.offer_date LIMIT 10\n\nResult:\n[{'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}, {'o.offer_date': None}]" name='cypher_rag_tool' tool_call_id='call_529B6053F4A6424AACF4FF54'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (o:Offer) WHERE o.offer_date IS NOT NULL RETURN o.offer_date LIMIT 20\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_E3829D23EED04C699E5B36EA'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) WHERE app.applied_date IS NOT NULL AND o.decision_date IS NOT NULL WITH d, duration.inDays(date(app.applied_date), date(o.decision_date)).days AS days_to_offer RETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer ORDER BY avg_days_to_offer DESC LIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_8E32BBBAE28C45B8B6AF3FC0'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)<-[:FOR_POSTING]-(app:Application)-[:RESULTED_IN]->(o:Offer) \nWHERE app.applied_date IS NOT NULL AND o.offer_date IS NOT NULL \nWITH d, duration.inDays(date(app.applied_date), date(o.offer_date)).days AS days_to_offer \nRETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer ORDER BY avg_days_to_offer DESC LIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_6F867297B6E0459AAF7CF99B'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content="Cypher Query executed:\nMATCH (d:Department {name:'Sales'})-[:POSTED]->(jp:JobPosting)<-[:FOR_POSTING]-(app:Application)-[:RESULTED_IN]->(o:Offer)\nWHERE app.applied_date IS NOT NULL AND o.offer_date IS NOT NULL\nWITH d, duration.inDays(date(app.applied_date), date(o.offer_date)).days AS days_to_offer\nRETURN d.name AS department, avg(days_to_offer) AS avg_days_to_offer\nORDER BY avg_days_to_offer DESC\nLIMIT 1\n\nResult: No matching records found." name='cypher_rag_tool' tool_call_id='call_CB8F4FAEEEC7475BA848DC4B'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) \nWHERE jp.posted_date IS NOT NULL AND o.extended_date IS NOT NULL \nWITH d, duration.inDays(jp.posted_date, o.extended_date) AS days_to_offer \nWITH d, avg(days_to_offer) AS avg_days \nRETURN d.name AS department, avg_days \nORDER BY avg_days DESC\nLIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_21BA0EECF48840F1A2AEFFF9'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content='Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)-[:FOR_POSTING]->(app:Application)-[:RESULTED_IN]->(o:Offer) \nWHERE jp.posted_date IS NOT NULL AND o.extended_date IS NOT NULL \nWITH d, duration.inDays(jp.posted_date, o.extended_date) AS days_to_offer \nWITH d, avg(days_to_offer) AS avg_days \nRETURN d.name AS department, avg_days \nORDER BY avg_days DESC\nLIMIT 1\n\nResult: No matching records found.' name='cypher_rag_tool' tool_call_id='call_EFF3F58BE6434C7D8700A2DF'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content="Cypher Query executed:\nMATCH (d:Department)-[:POSTED]->(jp:JobPosting)<-[:FOR_POSTING]-(app:Application)-[:RESULTED_IN]->(o:Offer)\nWHERE jp.posted_date IS NOT NULL AND o.extended_date IS NOT NULL\nWITH d, duration.inDays(jp.posted_date, o.extended_date) AS days_to_offer\nWITH d, avg(days_to_offer) AS avg_days\nRETURN d.name AS department, avg_days\nORDER BY avg_days DESC\nLIMIT 1\n\nResult:\n[{'department': 'Finance', 'avg_days': neo4j.time.Duration(months=0, days=394, seconds=0, nanoseconds=0)}]" name='cypher_rag_tool' tool_call_id='call_529AC36D7EC54D1E81D252F1'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new LangGraph chain...
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new tools chain...
+content="Cypher Query executed:\nMATCH (d:Department {name:'Sales'})-[:POSTED]->(jp:JobPosting)<-[:FOR_POSTING]-(app:Application)-[:RESULTED_IN]->(o:Offer)\nWHERE jp.posted_date IS NOT NULL AND o.extended_date IS NOT NULL\nWITH d, duration.inDays(jp.posted_date, o.extended_date) AS days_to_offer\nRETURN d.name AS department, avg(days_to_offer) AS avg_days\nLIMIT 1\n\nResult:\n[{'department': 'Sales', 'avg_days': neo4j.time.Duration(months=0, days=204, seconds=56212, nanoseconds=48192772)}]" name='cypher_rag_tool' tool_call_id='call_472DD8075CA8443D91D81252'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+
+
+> Entering new should_continue chain...
+
+> Finished chain.
+
+> Finished chain.
+
+> Finished chain.
+content="Cypher Query executed:\nMATCH (d:Department {name: 'Sales'})-[:POSTED]->(jp:JobPosting)<-[:FOR_POSTING]-(app:Application)-[:RESULTED_IN]->(o:Offer)\nWHERE jp.posted_date IS NOT NULL AND o.extended_date IS NOT NULL\nWITH d, duration.inDays(jp.posted_date, o.extended_date) AS days_to_offer\nRETURN d.name AS department, avg(days_to_offer) AS avg_days\nORDER BY avg_days DESC\nLIMIT 1\n\nResult:\n[{'department': 'Sales', 'avg_days': neo4j.time.Duration(months=0, days=204, seconds=56212, nanoseconds=48192772)}]" name='cypher_rag_tool' tool_call_id='call_11092CA411D44E4FB6A668CD'
+> Finished chain.
+
+
+> Entering new agent chain...
+
+
+> Entering new call_model chain...
+
+
+> Entering new RunnableSequence chain...
+
+
+> Entering new Prompt chain...
+
+> Finished chain.

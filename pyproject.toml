@@ -21,6 +21,8 @@ faker = "*"
 requests = "^2.34.2"
 tenacity = "^9.1.4"
 langgraph = "^1.2.10"
+langchain-huggingface = "^1.2.2"
+langchain-community = "^0.4.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"

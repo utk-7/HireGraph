@@ -1,0 +1,15 @@
+langchain
+langchain-openai
+huggingface_hub
+neo4j
+fastapi
+uvicorn
+streamlit
+plotly
+python-dotenv
+faker
+requests
+tenacity
+langgraph
+langchain-huggingface
+langchain-community

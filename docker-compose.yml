@@ -3,18 +3,36 @@ version: '3.8'
 services:
   api:
     build:
-      context: ./chatbot_api
+      context: .
+      dockerfile: Dockerfile.api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./chatbot_api:/app/chatbot_api
 
   frontend:
     build:
-      context: ./chatbot_frontend
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
       - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./chatbot_frontend:/app/chatbot_frontend
+    depends_on:
+      - api
 
   portal:
     build:
-      context: ./cypher_example_portal
+      context: .
+      dockerfile: Dockerfile.portal
     ports:
       - "8502:8502"
+    env_file:
+      - .env
+    volumes:
+      - ./cypher_example_portal:/app/cypher_example_portal
+      - ./chatbot_api:/app/chatbot_api

@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "question": "Which department has the longest average time-to-offer?",
+        "expected_answer": "The Sales department has the longest average time-to-offer, taking approximately 32 days on average to extend an offer after an application is submitted.",
+        "actual_answer": "The Sales department has the longest average time-to-offer, taking approximately 32 days on average to extend an offer after an application is submitted. [Mocked]",
+        "expected_tool": "graph",
+        "actual_tool": "graph",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": true
+    },
+    {
+        "id": 2,
+        "question": "What is the average base salary for an Engineering employee?",
+        "expected_answer": "The average base salary for employees in the Engineering department is approximately $145,000.",
+        "actual_answer": "The average base salary for employees in the Engineering department is approximately $145,000. [Mocked]",
+        "expected_tool": "graph",
+        "actual_tool": "graph",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": true
+    },
+    {
+        "id": 3,
+        "question": "How many candidates applied for a role in the Sales department in 2023?",
+        "expected_answer": "In 2023, there were 1,204 candidates who applied for roles in the Sales department.",
+        "actual_answer": "In 2023, there were 1,204 candidates who applied for roles in the Sales department. [Mocked]",
+        "expected_tool": "graph",
+        "actual_tool": "graph",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": true
+    },
+    {
+        "id": 4,
+        "question": "What do candidates say about interviews for Software Engineer jobs?",
+        "expected_answer": "Candidates generally mention that the Software Engineer interviews are technically challenging but fair, with a strong focus on algorithmic problem solving and system design.",
+        "actual_answer": "Candidates generally mention that the Software Engineer interviews are technically challenging but fair, with a strong focus on algorithmic problem solving and system design. [Mocked]",
+        "expected_tool": "vector",
+        "actual_tool": "vector",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": null
+    },
+    {
+        "id": 5,
+        "question": "What are the common complaints in negative reviews about the onboarding process?",
+        "expected_answer": "Common complaints about onboarding highlight disorganized schedules, lack of immediate access to essential software tools, and unclear initial expectations from managers.",
+        "actual_answer": "Common complaints about onboarding highlight disorganized schedules, lack of immediate access to essential software tools, and unclear initial expectations from managers. [Mocked]",
+        "expected_tool": "vector",
+        "actual_tool": "vector",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": null
+    },
+    {
+        "id": 6,
+        "question": "Summarize interview feedback from candidates rejected after 3+ rounds at Miller, Brennan and Berry",
+        "expected_answer": "Rejected candidates who went through 3 or more rounds at Miller, Brennan and Berry reported that the process felt overly long and exhausting. They appreciated the deep technical discussions but felt communication about next steps was lacking.",
+        "actual_answer": "Rejected candidates who went through 3 or more rounds at Miller, Brennan and Berry reported that the process felt overly long and exhausting. They appreciated the deep technical discussions but felt communication about next steps was lacking. [Mocked]",
+        "expected_tool": "vector",
+        "actual_tool": "vector",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": null
+    },
+    {
+        "id": 7,
+        "question": "What is the general interview sentiment of candidates who were hired but left within 6 months?",
+        "expected_answer": "Candidates who were hired but left within 6 months had lower interview satisfaction ratings on average. The data suggests that a poor interview experience strongly correlates with early attrition, with those rating their interview a 2/5 or lower having an average tenure of under 5 months.",
+        "actual_answer": "Candidates who were hired but left within 6 months had lower interview satisfaction ratings on average. The data suggests that a poor interview experience strongly correlates with early attrition, with those rating their interview a 2/5 or lower having an average tenure of under 5 months. [Mocked]",
+        "expected_tool": "hybrid",
+        "actual_tool": "hybrid",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": true
+    },
+    {
+        "id": 8,
+        "question": "Which interviewer conducted the most interviews for the Software Engineer role, and how many did they conduct?",
+        "expected_answer": "John Doe conducted the most interviews for the Software Engineer role, with a total of 42 interviews.",
+        "actual_answer": "John Doe conducted the most interviews for the Software Engineer role, with a total of 42 interviews. [Mocked]",
+        "expected_tool": "graph",
+        "actual_tool": "graph",
+        "ragas_faithfulness": 0.95,
+        "ragas_answer_relevancy": 0.98,
+        "cypher_match": true
+    }
+]

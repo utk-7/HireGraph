@@ -16,8 +16,8 @@
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="docs/streamlit_demo.png" width="48%" alt="Streamlit Chat Interface" />
-  <img src="docs/render_deploy.png" width="48%" alt="Render Deployment" />
+  <img src="Screenshot 2026-07-31 042238.png" width="48%" alt="Streamlit Chat Interface" />
+  <img src="/Screenshot 2026-07-31 042438.png" width="48%" alt="Render Deployment" />
 </div>
 
 ---

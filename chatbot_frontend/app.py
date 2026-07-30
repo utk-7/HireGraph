@@ -139,14 +139,14 @@ if prompt:
         try:
             # Post to FastAPI backend
             response = requests.post(
-                f"{API_URL}/chat", 
+                f"{API_URL.rstrip('/')}/chat", 
                 json={"message": prompt, "session_id": st.session_state.session_id},
                 timeout=120
             )
             
             # Handle HTTP Errors Gracefully
             if response.status_code == 429:
-                st.error("⚠️ **API Rate Limit Exceeded:** The OpenRouter free tier limit has been reached. Please try again later or update the API key.")
+                st.error("**API Rate Limit Exceeded:** The OpenRouter free tier limit has been reached. Please try again later or update the API key.")
                 message_placeholder.empty()
                 st.stop()
             elif response.status_code == 500:
@@ -157,12 +157,12 @@ if prompt:
                     if "detail" in err_json:
                         error_detail = str(err_json["detail"])
                         if "Rate limit exceeded" in error_detail:
-                            st.error("⚠️ **API Rate Limit Exceeded:** The AI model's rate limit has been reached.")
+                            st.error("**API Rate Limit Exceeded:** The AI model's rate limit has been reached.")
                             message_placeholder.empty()
                             st.stop()
                 except:
                     pass
-                st.error(f"🔌 **Backend Error:** Something went wrong on the server. ({error_detail})")
+                st.error(f"**Backend Error:** Something went wrong on the server. ({error_detail})")
                 message_placeholder.empty()
                 st.stop()
             
@@ -233,11 +233,11 @@ if prompt:
             })
             
         except requests.exceptions.ConnectionError:
-            st.error("🔌 **Connection Error:** Could not connect to the backend server. Is it running?")
+            st.error(f"**Connection Error:** Could not connect to the backend server. Is it running? (Attempted: {API_URL})")
             message_placeholder.empty()
         except requests.exceptions.Timeout:
-            st.error("⏳ **Timeout:** The backend took too long to respond.")
+            st.error("**Timeout:** The backend took too long to respond.")
             message_placeholder.empty()
         except Exception as e:
-            st.error(f"❌ **Unexpected Error:** {str(e)}")
+            st.error(f"**Unexpected Error:** {str(e)}")
             message_placeholder.empty()

@@ -6,7 +6,6 @@ import sys
 def start():
     print("Starting FastAPI backend...")
     env = os.environ.copy()
-    env["USE_HF_MOCK"] = "1"
     
     # Start FastAPI
     backend = subprocess.Popen(

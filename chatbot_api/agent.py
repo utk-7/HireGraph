@@ -67,12 +67,12 @@ memory = MemorySaver()
 
 agent_executor = create_react_agent(llm, tools, prompt=dynamic_prompt, checkpointer=memory)
 
-def invoke_agent(question: str, thread_id: str = "default_session", callbacks=None) -> dict:
+async def invoke_agent(question: str, thread_id: str = "default_session", callbacks=None) -> dict:
     config = {"configurable": {"thread_id": thread_id}}
     if callbacks:
         config["callbacks"] = callbacks
         
-    result = agent_executor.invoke(
+    result = await agent_executor.ainvoke(
         {"messages": [("user", question)]},
         config=config
     )

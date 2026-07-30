@@ -22,7 +22,7 @@ class ChatResponse(BaseModel):
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        result = invoke_agent(request.message, thread_id=request.session_id)
+        result = await invoke_agent(request.message, thread_id=request.session_id)
         response_text = result['messages'][-1].content
         
         # Simple heuristic to determine if the chart should be shown
@@ -35,6 +35,15 @@ async def chat(request: ChatRequest):
             show_attrition_chart=show_chart
         )
     except Exception as e:
+        import traceback
+        
+        # Check if this is an openai RateLimitError (which openrouter uses)
+        if e.__class__.__name__ == "RateLimitError" or "Rate limit" in str(e):
+            # We don't need a loud traceback for a known rate limit exhaustion
+            raise HTTPException(status_code=429, detail="OpenRouter rate limit exceeded.")
+            
+        # For genuinely unexpected errors, print the full traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/attrition_data")

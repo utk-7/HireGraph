@@ -146,9 +146,8 @@ if prompt:
             
             # Handle HTTP Errors Gracefully
             if response.status_code == 429:
-                st.error("**API Rate Limit Exceeded:** The OpenRouter free tier limit has been reached. Please try again later or update the API key.")
-                message_placeholder.empty()
-                st.stop()
+                agent_text = "⚠️ **API Rate Limit Exceeded:** My OpenRouter free tier limit has been reached for the day! Please try again later or update the API key."
+                show_chart = False
             elif response.status_code == 500:
                 # Try to parse the specific detail if available
                 error_detail = "Internal Server Error"
@@ -157,21 +156,19 @@ if prompt:
                     if "detail" in err_json:
                         error_detail = str(err_json["detail"])
                         if "Rate limit exceeded" in error_detail:
-                            st.error("**API Rate Limit Exceeded:** The AI model's rate limit has been reached.")
-                            message_placeholder.empty()
-                            st.stop()
+                            agent_text = "⚠️ **API Rate Limit Exceeded:** The AI model's rate limit has been reached."
+                            show_chart = False
                 except:
                     pass
-                st.error(f"**Backend Error:** Something went wrong on the server. ({error_detail})")
-                message_placeholder.empty()
-                st.stop()
-            
-            # Raise for any other non-200 status
-            response.raise_for_status()
-            
-            data = response.json()
-            agent_text = data.get("response", "No response provided.")
-            show_chart = data.get("show_attrition_chart", False)
+                
+                if 'agent_text' not in locals():
+                    agent_text = f"**Backend Error:** Something went wrong on the server. ({error_detail})"
+                    show_chart = False
+            else:
+                response.raise_for_status()
+                data = response.json()
+                agent_text = data.get("response", "No response provided.")
+                show_chart = data.get("show_attrition_chart", False)
             
             message_placeholder.markdown(agent_text)
             

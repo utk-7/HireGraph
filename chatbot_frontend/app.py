@@ -6,7 +6,9 @@ import plotly.graph_objects as go
 # pyrefly: ignore [missing-import]
 from plotly.subplots import make_subplots
 
-API_URL = "http://localhost:8000"
+import os
+
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="HireGraph Analytics", page_icon="📈", layout="centered")
 

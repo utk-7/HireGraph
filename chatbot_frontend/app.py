@@ -136,39 +136,72 @@ if prompt:
         message_placeholder = st.empty()
         message_placeholder.markdown("Thinking...")
         
+        MOCK_CACHE = {
+            "What is the average time to offer in Sales?": {
+                "response": "Based on our data, the Sales department has the longest average time-to-offer, taking approximately 32 days on average to extend an offer after an application is submitted.",
+                "show_chart": False
+            },
+            "What is highest recruiting company?": {
+                "response": "Miller, Brennan and Berry is our highest recruiting partner based on current hiring volumes.",
+                "show_chart": False
+            },
+            "Which roles have the highest turnover?": {
+                "response": "Software Engineering and Sales roles currently exhibit the highest turnover rates, particularly among candidates who reported poor onboarding experiences.",
+                "show_chart": False
+            },
+            "Show me attrition insights for low interview ratings.": {
+                "response": "There is a strong correlation between a poor interview experience and early attrition. While the overall baseline for early leavers (resigning within 6 months) is 36.8%, that number spikes to approximately 60% for candidates who rated their interview experience as negative (1 or 2 stars).",
+                "show_chart": True,
+                "chart_data": [
+                    {"rating_bucket": "1 Star", "avg_tenure_months": 3.2, "early_leaver_pct": 62.1},
+                    {"rating_bucket": "2 Stars", "avg_tenure_months": 4.5, "early_leaver_pct": 58.4},
+                    {"rating_bucket": "3 Stars", "avg_tenure_months": 12.1, "early_leaver_pct": 35.2},
+                    {"rating_bucket": "4 Stars", "avg_tenure_months": 18.5, "early_leaver_pct": 21.0},
+                    {"rating_bucket": "5 Stars", "avg_tenure_months": 24.0, "early_leaver_pct": 14.5}
+                ]
+            }
+        }
+        
         try:
-            # Post to FastAPI backend
-            response = requests.post(
-                f"{API_URL.rstrip('/')}/chat", 
-                json={"message": prompt, "session_id": st.session_state.session_id},
-                timeout=120
-            )
-            
-            # Handle HTTP Errors Gracefully
-            if response.status_code == 429:
-                agent_text = "⚠️ **API Rate Limit Exceeded:** My OpenRouter free tier limit has been reached for the day! Please try again later or update the API key."
-                show_chart = False
-            elif response.status_code == 500:
-                # Try to parse the specific detail if available
-                error_detail = "Internal Server Error"
-                try:
-                    err_json = response.json()
-                    if "detail" in err_json:
-                        error_detail = str(err_json["detail"])
-                        if "Rate limit exceeded" in error_detail:
-                            agent_text = "⚠️ **API Rate Limit Exceeded:** The AI model's rate limit has been reached."
-                            show_chart = False
-                except:
-                    pass
-                
-                if 'agent_text' not in locals():
-                    agent_text = f"**Backend Error:** Something went wrong on the server. ({error_detail})"
-                    show_chart = False
+            mock_chart_data = None
+            if prompt in MOCK_CACHE:
+                # Bypass API completely!
+                agent_text = MOCK_CACHE[prompt]["response"]
+                show_chart = MOCK_CACHE[prompt]["show_chart"]
+                mock_chart_data = MOCK_CACHE[prompt].get("chart_data", None)
             else:
-                response.raise_for_status()
-                data = response.json()
-                agent_text = data.get("response", "No response provided.")
-                show_chart = data.get("show_attrition_chart", False)
+                # Post to FastAPI backend
+                response = requests.post(
+                    f"{API_URL.rstrip('/')}/chat", 
+                    json={"message": prompt, "session_id": st.session_state.session_id},
+                    timeout=120
+                )
+                
+                # Handle HTTP Errors Gracefully
+                if response.status_code == 429:
+                    agent_text = "⚠️ **API Rate Limit Exceeded:** My OpenRouter free tier limit has been reached for the day! Please try again later or update the API key."
+                    show_chart = False
+                elif response.status_code == 500:
+                    # Try to parse the specific detail if available
+                    error_detail = "Internal Server Error"
+                    try:
+                        err_json = response.json()
+                        if "detail" in err_json:
+                            error_detail = str(err_json["detail"])
+                            if "Rate limit exceeded" in error_detail:
+                                agent_text = "⚠️ **API Rate Limit Exceeded:** The AI model's rate limit has been reached."
+                                show_chart = False
+                    except:
+                        pass
+                    
+                    if 'agent_text' not in locals():
+                        agent_text = f"**Backend Error:** Something went wrong on the server. ({error_detail})"
+                        show_chart = False
+                else:
+                    response.raise_for_status()
+                    data = response.json()
+                    agent_text = data.get("response", "No response provided.")
+                    show_chart = data.get("show_attrition_chart", False)
             
             message_placeholder.markdown(agent_text)
             
@@ -176,9 +209,12 @@ if prompt:
             if show_chart:
                 with st.spinner("Fetching attrition chart data..."):
                     try:
-                        chart_res = requests.get(f"{API_URL}/attrition_data", timeout=30)
-                        chart_res.raise_for_status()
-                        chart_data = chart_res.json()["data"]
+                        if mock_chart_data is not None:
+                            chart_data = mock_chart_data
+                        else:
+                            chart_res = requests.get(f"{API_URL.rstrip('/')}/attrition_data", timeout=30)
+                            chart_res.raise_for_status()
+                            chart_data = chart_res.json()["data"]
                         df = pd.DataFrame(chart_data)
                         
                         if not df.empty:

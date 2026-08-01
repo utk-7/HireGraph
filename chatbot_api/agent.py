@@ -16,22 +16,6 @@ load_dotenv()
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-if os.getenv("USE_HF_MOCK") == "1":
-    from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-
-    hf = HuggingFaceEndpoint(
-        repo_id="mistralai/Mistral-7B-Instruct-v0.3", max_new_tokens=512
-    )
-    llm = ChatHuggingFace(llm=hf)
-else:
-    llm = ChatOpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=OPENROUTER_API_KEY,
-        model="openai/gpt-oss-20b:free",
-        temperature=0,
-        max_retries=3,
-    )
-
 from langgraph.checkpoint.memory import MemorySaver
 
 from chatbot_api.few_shot import get_few_shot_prompt
@@ -74,19 +58,44 @@ def dynamic_prompt(state):
 tools = [cypher_rag_tool, vector_rag_tool, hybrid_rag_tool]
 memory = MemorySaver()
 
-agent_executor = create_react_agent(
-    llm, tools, prompt=dynamic_prompt, checkpointer=memory
-)
+_agent_executor = None
+
+
+def get_agent_executor():
+    global _agent_executor
+    if _agent_executor is None:
+        if os.getenv("USE_HF_MOCK") == "1":
+            from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+
+            hf = HuggingFaceEndpoint(
+                repo_id="mistralai/Mistral-7B-Instruct-v0.3", max_new_tokens=512
+            )
+            llm = ChatHuggingFace(llm=hf)
+        else:
+            api_key = os.getenv("OPENROUTER_API_KEY")
+            llm = ChatOpenAI(
+                base_url="https://openrouter.ai/api/v1",
+                api_key=api_key if api_key else "dummy_key_to_allow_init",
+                model="openai/gpt-oss-20b:free",
+                temperature=0,
+                max_retries=3,
+            )
+
+        _agent_executor = create_react_agent(
+            llm, tools, prompt=dynamic_prompt, checkpointer=memory
+        )
+    return _agent_executor
 
 
 async def invoke_agent(
     question: str, thread_id: str = "default_session", callbacks=None
 ) -> dict:
+    executor = get_agent_executor()
     config = {"configurable": {"thread_id": thread_id}}
     if callbacks:
         config["callbacks"] = callbacks
 
-    result = await agent_executor.ainvoke(
+    result = await executor.ainvoke(
         {"messages": [("user", question)]}, config=config
     )
     return result

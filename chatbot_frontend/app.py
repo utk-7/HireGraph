@@ -3,6 +3,7 @@ import streamlit as st
 import requests
 import uuid
 import pandas as pd
+# pyrefly: ignore [missing-import]
 import plotly.graph_objects as go
 # pyrefly: ignore [missing-import]
 from plotly.subplots import make_subplots

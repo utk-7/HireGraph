@@ -95,7 +95,5 @@ async def invoke_agent(
     if callbacks:
         config["callbacks"] = callbacks
 
-    result = await executor.ainvoke(
-        {"messages": [("user", question)]}, config=config
-    )
+    result = await executor.ainvoke({"messages": [("user", question)]}, config=config)
     return result

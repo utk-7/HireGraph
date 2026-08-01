@@ -31,7 +31,7 @@ def get_examples():
         driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
     except Exception:
         return []
-        
+
     try:
         with driver.session() as session:
             result = session.run(

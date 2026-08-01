@@ -25,13 +25,21 @@ st.markdown("""
 
 
 def get_examples():
-    driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+    if not NEO4J_URI:
+        return []
+    try:
+        driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+    except Exception:
+        return []
+        
     try:
         with driver.session() as session:
             result = session.run(
                 "MATCH (e:CypherExample) RETURN e.question AS question, e.cypherQuery AS query"
             )
             return [record.data() for record in result]
+    except Exception:
+        return []
     finally:
         driver.close()
 

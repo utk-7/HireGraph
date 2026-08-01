@@ -7,6 +7,8 @@ import pandas as pd
 # pyrefly: ignore [missing-import]
 import plotly.graph_objects as go
 import requests
+
+# pyrefly: ignore [missing-import]
 import streamlit as st
 
 # pyrefly: ignore [missing-import]
@@ -35,7 +37,7 @@ st.markdown(
         font-weight: 700;
         letter-spacing: -0.5px;
     }
-    
+
     /* Subtitle text */
     .stMarkdown p {
         color: #4f252a;
@@ -50,7 +52,7 @@ st.markdown(
         padding: 10px 15px !important;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    
+
     [data-testid="chatAvatarIcon-user"] + div p {
         color: white !important;
     }
@@ -64,11 +66,11 @@ st.markdown(
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         border: 1px solid #fbc9b9;
     }
-    
+
     [data-testid="chatAvatarIcon-assistant"] + div p {
         color: #4f252a !important;
     }
-    
+
     /* Agent Avatar Icon Accent */
     [data-testid="chatAvatarIcon-assistant"] svg {
         fill: #f1745e !important;
@@ -82,7 +84,7 @@ st.markdown(
         background-color: white !important;
         box-shadow: 0 4px 15px rgba(79, 37, 42, 0.15) !important;
     }
-    
+
     /* Error Messages */
     .stAlert {
         background-color: #ffe6e6 !important;

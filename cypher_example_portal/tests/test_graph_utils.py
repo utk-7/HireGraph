@@ -1,7 +1,7 @@
 from src.graph_utils import (
     does_question_exist,
-    is_valid_cypher_query,
     fetch_most_similar_question,
+    is_valid_cypher_query,
 )
 
 

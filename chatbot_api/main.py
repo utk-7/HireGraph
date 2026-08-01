@@ -1,9 +1,10 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import os
 import re
+
 from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
 from neo4j import GraphDatabase
+from pydantic import BaseModel
 
 from chatbot_api.agent import invoke_agent
 
@@ -11,47 +12,50 @@ load_dotenv()
 
 app = FastAPI(title="HireGraph API")
 
+
 class ChatRequest(BaseModel):
     message: str
     session_id: str
+
 
 class ChatResponse(BaseModel):
     response: str
     show_attrition_chart: bool
 
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
         result = await invoke_agent(request.message, thread_id=request.session_id)
-        response_text = result['messages'][-1].content
-        
+        response_text = result["messages"][-1].content
+
         # Simple heuristic to determine if the chart should be shown
         keywords = ["attrition", "left early", "6 months", "tenure", "rating"]
         msg_lower = request.message.lower()
         show_chart = any(k in msg_lower for k in keywords)
-        
-        return ChatResponse(
-            response=response_text,
-            show_attrition_chart=show_chart
-        )
+
+        return ChatResponse(response=response_text, show_attrition_chart=show_chart)
     except Exception as e:
         import traceback
-        
+
         # Check if this is an openai RateLimitError (which openrouter uses)
         if e.__class__.__name__ == "RateLimitError" or "Rate limit" in str(e):
             # We don't need a loud traceback for a known rate limit exhaustion
-            raise HTTPException(status_code=429, detail="OpenRouter rate limit exceeded.")
-            
+            raise HTTPException(
+                status_code=429, detail="OpenRouter rate limit exceeded."
+            )
+
         # For genuinely unexpected errors, print the full traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/attrition_data")
 async def get_attrition_data():
     uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
     user = os.getenv("NEO4J_USER", "neo4j")
     password = os.getenv("NEO4J_PASSWORD", "password")
-    
+
     query = """
     MATCH (c:Candidate)-[:WROTE]->(r:Review {review_type: 'interview_experience'}), (c)-[:HIRED_AS]->(e:Employee)
     WHERE r.rating IS NOT NULL AND e.tenure_months IS NOT NULL
@@ -76,7 +80,7 @@ async def get_attrition_data():
       toFloat(b.early_leavers) / overall_early_leavers * 100 as early_leaver_pct
     ORDER BY rating_bucket
     """
-    
+
     try:
         driver = GraphDatabase.driver(uri, auth=(user, password))
         with driver.session() as session:

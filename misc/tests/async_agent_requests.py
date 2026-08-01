@@ -1,5 +1,6 @@
 import asyncio
 import time
+
 import httpx
 
 CHATBOT_URL = "http://localhost:8000/hospital-rag-agent"

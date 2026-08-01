@@ -1,4 +1,5 @@
 import time
+
 import requests
 
 CHATBOT_URL = "http://localhost:8000/hospital-rag-agent"

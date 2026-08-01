@@ -1,13 +1,16 @@
 import os
-# pyrefly: ignore [missing-import]
-from langchain_openai import ChatOpenAI
-# pyrefly: ignore [missing-import]
-from langgraph.prebuilt import create_react_agent
+
 from dotenv import load_dotenv
 
-from chatbot_api.tools.cypher_tool import cypher_rag_tool, SCHEMA
-from chatbot_api.tools.vector_tool import vector_rag_tool
+# pyrefly: ignore [missing-import]
+from langchain_openai import ChatOpenAI
+
+# pyrefly: ignore [missing-import]
+from langgraph.prebuilt import create_react_agent
+
+from chatbot_api.tools.cypher_tool import SCHEMA, cypher_rag_tool
 from chatbot_api.tools.hybrid_tool import hybrid_rag_tool
+from chatbot_api.tools.vector_tool import vector_rag_tool
 
 load_dotenv()
 
@@ -15,7 +18,10 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 if os.getenv("USE_HF_MOCK") == "1":
     from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-    hf = HuggingFaceEndpoint(repo_id="mistralai/Mistral-7B-Instruct-v0.3", max_new_tokens=512)
+
+    hf = HuggingFaceEndpoint(
+        repo_id="mistralai/Mistral-7B-Instruct-v0.3", max_new_tokens=512
+    )
     llm = ChatHuggingFace(llm=hf)
 else:
     llm = ChatOpenAI(
@@ -23,10 +29,11 @@ else:
         api_key=OPENROUTER_API_KEY,
         model="openai/gpt-oss-20b:free",
         temperature=0,
-        max_retries=3
+        max_retries=3,
     )
 
 from langgraph.checkpoint.memory import MemorySaver
+
 from chatbot_api.few_shot import get_few_shot_prompt
 
 system_message_base = f"""You are an intelligent recruiting assistant. You have access to three specific tools to answer questions. 
@@ -49,6 +56,7 @@ TOOL USAGE RULES:
 When writing Cypher queries for the tools, use standard Neo4j syntax. For date math, use `duration.inDays(date1, date2).days`.
 """
 
+
 def dynamic_prompt(state):
     # Extract latest user message
     messages = state.get("messages", [])
@@ -57,23 +65,28 @@ def dynamic_prompt(state):
         if msg.type == "user":
             user_msg = msg.content
             break
-            
+
     few_shot = get_few_shot_prompt(user_msg) if user_msg else ""
-    
+
     return [("system", system_message_base + few_shot)] + messages
+
 
 tools = [cypher_rag_tool, vector_rag_tool, hybrid_rag_tool]
 memory = MemorySaver()
 
-agent_executor = create_react_agent(llm, tools, prompt=dynamic_prompt, checkpointer=memory)
+agent_executor = create_react_agent(
+    llm, tools, prompt=dynamic_prompt, checkpointer=memory
+)
 
-async def invoke_agent(question: str, thread_id: str = "default_session", callbacks=None) -> dict:
+
+async def invoke_agent(
+    question: str, thread_id: str = "default_session", callbacks=None
+) -> dict:
     config = {"configurable": {"thread_id": thread_id}}
     if callbacks:
         config["callbacks"] = callbacks
-        
+
     result = await agent_executor.ainvoke(
-        {"messages": [("user", question)]},
-        config=config
+        {"messages": [("user", question)]}, config=config
     )
     return result
